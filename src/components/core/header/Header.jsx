@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import Image from "next/image";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -19,7 +20,7 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center p-6">
         {/* Logo */}
         <div className="text-2xl font-bold text-gray-800">
-          <Link href="/">Cuisine Cart</Link>
+          <Link href="/"><Image src="/cuisineCart.png" alt="Cuisine Cart Logo" width={150} height={150} /></Link>
         </div>
 
         {/* Desktop Navigation */}
