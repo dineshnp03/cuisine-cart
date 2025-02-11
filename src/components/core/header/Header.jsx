@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import Image from "next/image";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -53,7 +54,6 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Navigation Links */}
             <nav className="flex flex-col items-center space-y-6 mb-12">
               {navigation.map((item) => (
                 <Link
@@ -66,7 +66,6 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Contact Us CTA */}
             <div className="text-center">
               <a
                 href="mailto:support@cuisinecart.com"
@@ -77,7 +76,6 @@ const Header = () => {
             </div>
           </Dialog.Panel>
 
-          {/* Close Button */}
           <div className="absolute top-4 right-4">
             <button
               onClick={() => setMobileMenuOpen(false)}
