@@ -3,7 +3,7 @@ const Contact = () => (
     <div className="container mx-auto px-5 sm:px-6 lg:px-10 text-center">
       <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
       <p className="mb-6">
-        Have questions? Want to learn more about how Cuisine Cart works? We're here to help!
+        Have questions? Want to learn more about how Cuisine Cart works? We&apos;re here to help!
       </p>
       <a
         href="mailto:support@cuisinecart.com"
