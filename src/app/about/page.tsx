@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "About Us | Cuisine Cart",
@@ -81,7 +82,7 @@ export default function About() {
           <h2 className="text-3xl font-bold mb-6">Meet Our Team</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-lg">
-              <img
+              <Image
                 src="/team1.jpg"
                 alt="Team Member"
                 className="w-24 h-24 rounded-full mx-auto mb-4"
@@ -90,7 +91,7 @@ export default function About() {
               <p className="text-sm">Founder & CEO</p>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-lg">
-              <img
+              <Image
                 src="/team2.jpg"
                 alt="Team Member"
                 className="w-24 h-24 rounded-full mx-auto mb-4"
@@ -99,7 +100,7 @@ export default function About() {
               <p className="text-sm">Co-Founder & Chief Operations</p>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-lg">
-              <img
+              <Image
                 src="/team3.jpg"
                 alt="Team Member"
                 className="w-24 h-24 rounded-full mx-auto mb-4"
@@ -118,7 +119,7 @@ export default function About() {
         <div className="container mx-auto px-5 sm:px-6 lg:px-10 text-center">
           <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
           <p className="mb-6">
-            Have questions? Want to learn more about how Cuisine Cart works? We're here to help!
+            Have questions? Want to learn more about how Cuisine Cart works? We&apos;re here to help!
           </p>
           <a
             href="mailto:support@cuisinecart.com"
