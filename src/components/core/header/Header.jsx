@@ -20,7 +20,7 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center p-6">
         {/* Logo */}
         <div className="text-2xl font-bold text-gray-800">
-          <Link href="/"><Image src="/cuisineCart.png" alt="Cuisine Cart Logo" width={150} height={150} /></Link>
+          <Link href="/">Cuisine Cart</Link>
         </div>
 
         {/* Desktop Navigation */}
@@ -54,7 +54,6 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Navigation Links */}
             <nav className="flex flex-col items-center space-y-6 mb-12">
               {navigation.map((item) => (
                 <Link
@@ -67,7 +66,6 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Contact Us CTA */}
             <div className="text-center">
               <a
                 href="mailto:support@cuisinecart.com"
@@ -78,7 +76,6 @@ const Header = () => {
             </div>
           </Dialog.Panel>
 
-          {/* Close Button */}
           <div className="absolute top-4 right-4">
             <button
               onClick={() => setMobileMenuOpen(false)}
