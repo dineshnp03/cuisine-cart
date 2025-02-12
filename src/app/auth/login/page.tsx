@@ -6,6 +6,7 @@ import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/Loader";
+import AuthContainer from "@/components/AuthContainer";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,15 +27,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md w-96">
-        <h2 className="text-xl font-bold mb-4">Login</h2>
-        <form onSubmit={handleSubmit}>
-          <Input placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-          <Input placeholder="Password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-          <Button type="submit">{loading ? <Loader /> : "Login"}</Button>
-        </form>
+    <AuthContainer>
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="bg-white p-6 rounded shadow-md w-96">
+          <h2 className="text-xl font-bold mb-4">Login</h2>
+          <form onSubmit={handleSubmit}>
+            <Input
+              placeholder="Email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+            <Input
+              placeholder="Password"
+              type="password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+            />
+            <Button type="submit">{loading ? <Loader /> : "Login"}</Button>
+          </form>
+        </div>
       </div>
-    </div>
+    </AuthContainer>
   );
 }
