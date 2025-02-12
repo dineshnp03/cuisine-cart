@@ -14,7 +14,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       const timer = setTimeout(() => {
         setLoading(false);
         router.push("/user-selections/user-selection"); 
-      }, 3000); 
+      }, 5000); 
 
       return () => {
         clearTimeout(timer);
