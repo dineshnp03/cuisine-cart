@@ -9,7 +9,7 @@ export default function UserSelection() {
   const router = useRouter(); // Initializing router
 
   const handleRoleSelection = (role: string) => {
-    router.push(`/auth/signup?role=${role}`); // Redirecting to login with role as query param
+    router.push(`/auth/login?role=${role}`); // Redirecting to login with role as query param
   };
 
   return (
