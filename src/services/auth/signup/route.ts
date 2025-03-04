@@ -18,6 +18,7 @@ export async function POST(req: Request) {
     await newUser.save();
     return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: `Internal Server Error : ${error} ` }, { status: 500 });
   }
 }

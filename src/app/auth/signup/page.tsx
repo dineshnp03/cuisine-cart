@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/Loader";
@@ -21,20 +20,27 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      const res = await axios.post("/api/auth/register", form);
-      if (res.status === 201) router.push("/login");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    alert("Signup Success");
+    setLoading(false);
+    router.push("/auth/login");
+    // try {
+    //   const res = await axios.post("/services/auth/signup", form, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   if (res.status === 201) router.push("/login");
+    // } catch (error) {
+    //   console.error(error);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (
     <AuthContainer>
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <div className="bg-white p-6 rounded shadow-md w-96">
+      <div className="flex items-center justify-center ">
+        <div className=" flex flex-col justify-center p-6 ">
           <h2 className="text-xl font-bold mb-4">Signup</h2>
           <form onSubmit={handleSubmit}>
             <Input
@@ -53,15 +59,6 @@ export default function SignupPage() {
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
-            <select
-              value={form.role}
-              onChange={(e) => setForm({ ...form, role: e.target.value })}
-              className="w-full p-2 border rounded mt-2"
-            >
-              <option value="diner">Diner</option>
-              <option value="driver">Driver</option>
-              <option value="chef">Chef</option>
-            </select>
             <Button type="submit">{loading ? <Loader /> : "Signup"}</Button>
           </form>
         </div>
