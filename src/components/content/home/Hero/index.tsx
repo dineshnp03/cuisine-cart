@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Hero = () => (
   <section
     id="hero"
@@ -10,11 +12,11 @@ const Hero = () => (
         Cuisine Cart connects you with local chefs offering authentic home-cooked meals from around
         the world.
       </p>
-      <a
-        href="#about"
+      <Link
+        href="/user-selections"
         className="text-white bg-orange-700 hover:bg-orange-800 font-semibold py-3 px-8 rounded-full shadow-md">
         Get Started
-      </a>
+      </Link>
     </div>
   </section>
 );
