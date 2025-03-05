@@ -13,7 +13,7 @@ const Hero = () => (
         the world.
       </p>
       <Link
-        href="/user-selections"
+        href="/user-selection"
         className="text-white bg-orange-700 hover:bg-orange-800 font-semibold py-3 px-8 rounded-full shadow-md">
         Get Started
       </Link>

@@ -1,4 +1,3 @@
-import { connectToDatabase } from "@/lib/db";
 import { User } from "@/models/User";
 import { comparePassword } from "@/utils/bcrypt";
 import { signJwtToken } from "@/utils/jwt";
@@ -8,7 +7,6 @@ export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
-    await connectToDatabase();
     const user = await User.findOne({ email });
 
     if (!user || !(await comparePassword(password, user.password))) {
