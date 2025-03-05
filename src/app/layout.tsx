@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/core/header/Header";
 import Footer from "@/components/core/footer/Footer";
-import ClientLayout from "./ClientLayout";
+import { connectToDatabase } from "@/lib/db";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,16 +20,18 @@ export const metadata: Metadata = {
   description: "Your Favorite Cuisine Delivered",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+      await connectToDatabase();
+  
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header />
-        <ClientLayout>{children}</ClientLayout>
+        {children}
         <Footer />
       </body>
     </html>
