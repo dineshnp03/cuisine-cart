@@ -10,7 +10,7 @@ interface ChefCardProps {
 
 export default function ChefCard({ name, cuisine, rating, imageUrl }: ChefCardProps) {
   return (
-    <div className="flex border-b pb-4">
+    <div className="flex border-b mb-4 pb-4">
       <div className="w-20 h-20 flex-shrink-0">
         <Image src={imageUrl} alt={name} width={80} height={80} className="w-full h-full object-cover rounded-md" />
       </div>

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Loader from "@/components/Loader";
 import Image from "next/image";
+import axios from 'axios';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,17 +21,22 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    // Simulate login success
-    setTimeout(() => {
-      setLoading(false);
-      if (role === "diner"){
-        router.push("/diner/dashboard");
-      }else{
-        router.push("/");
+    try {
+      const res = await axios.post("/api/auth/login", form);
+      if (res.status === 200) {
+        if (role === "diner") {
+          router.push("/diner/dashboard"); // Redirect to the diner page
+        } else {
+          router.push("/"); // Default redirect
+        }
       }
-    }, 2000);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#FFF6EC] p-4">
