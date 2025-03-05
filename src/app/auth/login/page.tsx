@@ -23,9 +23,12 @@ export default function LoginPage() {
 
     // Simulate login success
     setTimeout(() => {
-      alert(`Login Successful as ${role || "User"}`);
       setLoading(false);
-      router.push("/");
+      if (role === "diner"){
+        router.push("/diner/dashboard");
+      }else{
+        router.push("/");
+      }
     }, 2000);
   };
 
