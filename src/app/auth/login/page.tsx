@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -23,14 +23,20 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await axios.post("/api/auth/login", form);
-      if (res.status === 200) router.push("/");
+      if (res.status === 200) {
+        if (role === "diner") {
+          router.push("/diner/dashboard"); // Redirect to the diner page
+        } else {
+          router.push("/"); // Default redirect
+        }
+      }
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
-      router.push("/");
     }
   };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#FFF6EC] p-4">
