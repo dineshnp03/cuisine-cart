@@ -33,9 +33,12 @@ export default async function RootLayout({
   
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen`}>
         <Header />
+        <div className="flex-grow">
+
         {children}
+        </div>
         <Toaster position="top-right" richColors />
         <Footer />
       </body>
