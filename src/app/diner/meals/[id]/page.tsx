@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 interface Dish {
   _id: string;
@@ -23,22 +24,23 @@ export default function DinerMealDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchMeal();
-  }, [params.id]);
+    if (!params.id) return;
 
-  const fetchMeal = async () => {
-    try {
-      const res = await fetch(`/api/meals/${params.id}`);
-      if (!res.ok) throw new Error("Failed to fetch meal");
-      const data = await res.json();
-      // data should contain { name, dishIds: [ { _id, name, type, photoUrl } ... ] }
-      setMeal(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    setLoading(true);
+    (async () => {
+      try {
+        const res = await fetch(`/api/meals/${params.id}`);
+        if (!res.ok) throw new Error("Failed to fetch meal");
+        const data = await res.json();
+        // data should contain { name, dishIds: [{ _id, name, type, photoUrl }, ...] }
+        setMeal(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [params.id]);
 
   if (loading) return <div className="p-4">Loading meal details...</div>;
   if (!meal) return <div className="p-4">Meal not found</div>;
@@ -47,10 +49,12 @@ export default function DinerMealDetailPage() {
     <div className="p-4">
       {/* Meal Header */}
       <div className="flex flex-col items-center mb-6">
-        {/* If you have a meal photo, you can show it here */}
-        <img
+        {/* If you have a mealPhotoUrl, use that. Otherwise, a placeholder. */}
+        <Image
           src="https://via.placeholder.com/600x300?text=Meal+Hero"
           alt={meal.name}
+          width={600}
+          height={300}
           className="w-full max-w-4xl h-auto object-cover rounded-lg mb-4"
         />
         <h1 className="text-3xl font-bold">{meal.name}</h1>
@@ -62,9 +66,11 @@ export default function DinerMealDetailPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {meal.dishIds.map((dish) => (
           <div key={dish._id} className="border rounded-lg overflow-hidden shadow-sm bg-white">
-            <img
+            <Image
               src={dish.photoUrl || "https://via.placeholder.com/400x250?text=Dish+Image"}
               alt={dish.name}
+              width={400}
+              height={250}
               className="w-full h-40 object-cover"
             />
             <div className="p-4">

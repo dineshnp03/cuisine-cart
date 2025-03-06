@@ -6,30 +6,30 @@ import { useRouter, useParams } from "next/navigation";
 export default function EditChefDishPage() {
   const router = useRouter();
   const params = useParams() as { id: string };
+
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const fetchDish = async () => {
-    try {
-      const res = await fetch(`/api/dishes/${params.id}`);
-      if (!res.ok) throw new Error("Failed to fetch dish");
-      const dish = await res.json();
-      setName(dish.name);
-      setType(dish.type);
-      setPhotoUrl(dish.photoUrl || "");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (params.id) {
-      fetchDish();
-    }
+    if (!params.id) return; // only fetch if we have an id
+    setLoading(true);
+
+    (async () => {
+      try {
+        const res = await fetch(`/api/dishes/${params.id}`);
+        if (!res.ok) throw new Error("Failed to fetch dish");
+        const dish = await res.json();
+        setName(dish.name);
+        setType(dish.type);
+        setPhotoUrl(dish.photoUrl || "");
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [params.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,6 +67,7 @@ export default function EditChefDishPage() {
             required
           />
         </div>
+
         <div>
           <label className="block font-semibold">Type</label>
           <input
@@ -76,6 +77,7 @@ export default function EditChefDishPage() {
             required
           />
         </div>
+
         <div>
           <label className="block font-semibold">Photo URL</label>
           <input
@@ -84,6 +86,7 @@ export default function EditChefDishPage() {
             onChange={(e) => setPhotoUrl(e.target.value)}
           />
         </div>
+
         <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
           Update Dish
         </button>

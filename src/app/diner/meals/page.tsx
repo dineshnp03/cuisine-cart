@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Meal {
   _id: string;
@@ -61,10 +62,12 @@ export default function DinerMealsPage() {
         {filteredMeals.map((meal) => (
           <div key={meal._id} className="border rounded-lg overflow-hidden shadow-sm bg-white">
             {/* Meal image (placeholder or stored) */}
-            <img
+            <Image
               src="https://via.placeholder.com/500x300?text=Meal+Image"
               alt={meal.name}
-              className="w-full h-48 object-cover"
+              width={400}
+              height={250}
+              className="w-full h-40 object-cover"
             />
 
             <div className="p-4">
