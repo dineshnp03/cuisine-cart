@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import Loader from "@/components/Loader";
 import Image from "next/image";
 import axios from 'axios';
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,17 +25,24 @@ export default function LoginPage() {
     try {
       const res = await axios.post("/api/auth/login", form);
       if (res.status === 200) {
-        // Store token in localStorage
-        localStorage.setItem("token", res.data.token);
-        router.push("/"); // Redirect to home or dashboard
+        toast.success(" Login Success!", { description: "Logged In successfully." });
+        if (role === "diner") {
+          router.push("/diner/dashboard"); 
+        } else {
+          router.push("/"); // Default redirect
+        }
+      } else {
+        toast.error("Invalid Credentials", { description: "Please check your email and password." });
       }
     } catch (error) {
-      console.error("Login error:", error);
+      toast.error("Error!", { description: `Something went wrong!, Please try Again ${error}` });
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
   
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#FFF6EC] p-4">
