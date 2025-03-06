@@ -51,7 +51,7 @@ export default function DinerMealDetailPage() {
       <div className="flex flex-col items-center mb-6">
         {/* If you have a mealPhotoUrl, use that. Otherwise, a placeholder. */}
         <Image
-          src="https://via.placeholder.com/600x300?text=Meal+Hero"
+          src="https://placehold.co//600x300?text=Meal+Hero"
           alt={meal.name}
           width={600}
           height={300}
@@ -67,7 +67,7 @@ export default function DinerMealDetailPage() {
         {meal.dishIds.map((dish) => (
           <div key={dish._id} className="border rounded-lg overflow-hidden shadow-sm bg-white">
             <Image
-              src={dish.photoUrl || "https://via.placeholder.com/400x250?text=Dish+Image"}
+              src={dish.photoUrl || "https://placehold.co//400x250?text=Dish+Image"}
               alt={dish.name}
               width={400}
               height={250}
