@@ -11,7 +11,6 @@ export async function POST(req: Request) {
 
     // 2. Parse request body
     const { email, password } = (await req.json()) as { email?: string; password?: string };
-
     // 3. Check for missing fields
     if (!email || !password) {
       return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
@@ -20,29 +19,22 @@ export async function POST(req: Request) {
     // 4. Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: "Invalid credentials (user not found)" }, { status: 401 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // 5. Compare passwords
-    const isMatch = await comparePassword(password, user.password);
-    if (!isMatch) {
-      return NextResponse.json({ error: "Invalid credentials (wrong password)" }, { status: 401 });
+    if ( !(await comparePassword(password, user.password))) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    // 6. Sign JWT containing user info
-    const token = signJwtToken({ userId: user._id, role: user.role });
+    const token = signJwtToken({ userId: user._id, role: user.role, email: user.email, name: user.name });
 
-    // 7. Return success with token & role
-    return NextResponse.json(
-      {
-        token,
-        role: user.role,
-        message: "Login successful",
-      },
-      { status: 200 }
-    );
-  } catch (error: any) {
-    console.error("Login error:", error);
-    return NextResponse.json({ error: `Internal Server Error : ${error}` }, { status: 500 });
+    const response = NextResponse.json({ message: "Login successful", token, role: user.role }, { status: 200 });
+
+    // Set JWT as an HttpOnly cookie
+    response.cookies.set("token", token, { httpOnly: true, secure: true, maxAge: 86400 });
+  
+    return response;
+  } catch (error) {
+    return NextResponse.json({ error: `Internal Server Error : ${error} ` }, { status: 500 });
   }
 }
