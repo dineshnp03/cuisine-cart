@@ -1,17 +1,18 @@
 // src/app/api/dishes/[id]/route.ts
+
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { Dish } from "@/models/Dish";
 
-interface Params {
-  params: { id: string };
-}
-
 // GET /api/dishes/:id
-export async function GET(_req: Request, { params }: Params) {
+export async function GET(_req: Request, context: any) {
   try {
     await connectToDatabase();
-    const dish = await Dish.findById(params.id);
+
+    // Must await context.params, then destructure 'id'
+    const { id } = await context.params;
+
+    const dish = await Dish.findById(id);
     if (!dish) {
       return NextResponse.json({ error: "Dish not found" }, { status: 404 });
     }
@@ -22,13 +23,15 @@ export async function GET(_req: Request, { params }: Params) {
 }
 
 // PUT /api/dishes/:id
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(req: Request, context: any) {
   try {
     await connectToDatabase();
-    const updates = await req.json(); // { name, type, photoUrl }
-    const updatedDish = await Dish.findByIdAndUpdate(params.id, updates, {
-      new: true, // return updated doc
-      runValidators: true, // ensure schema validation
+    const { id } = await context.params;
+
+    const updates = await req.json(); // e.g. { name, type, photoUrl }
+    const updatedDish = await Dish.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
     });
     if (!updatedDish) {
       return NextResponse.json({ error: "Dish not found" }, { status: 404 });
@@ -40,10 +43,12 @@ export async function PUT(req: Request, { params }: Params) {
 }
 
 // DELETE /api/dishes/:id
-export async function DELETE(_req: Request, { params }: Params) {
+export async function DELETE(_req: Request, context: any) {
   try {
     await connectToDatabase();
-    const deletedDish = await Dish.findByIdAndDelete(params.id);
+    const { id } = await context.params;
+
+    const deletedDish = await Dish.findByIdAndDelete(id);
     if (!deletedDish) {
       return NextResponse.json({ error: "Dish not found" }, { status: 404 });
     }
