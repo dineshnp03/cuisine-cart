@@ -99,11 +99,11 @@ export default function SignupPage() {
                 </h2>
               </div>
 
-              <div className="relative w-full flex flex-col items-center p-10 mt-20 pt-20">
+              <div className="relative w-full flex flex-col items-center  lg:p-10 mt-20 pt-20">
                 {/* Form Section */}
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-2 w-[85%] max-w-[400px]"
+                  className="space-y-2 w-[100%] max-w-[400px]"
                 >
                   {/* Name Input */}
                   <div className="mb-3">
