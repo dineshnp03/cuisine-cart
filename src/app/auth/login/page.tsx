@@ -23,14 +23,18 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await axios.post("/api/auth/login", form);
-      if (res.status === 200) router.push("/");
+      if (res.status === 200) {
+        // Store token in localStorage
+        localStorage.setItem("token", res.data.token);
+        router.push("/"); // Redirect to home or dashboard
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Login error:", error);
     } finally {
       setLoading(false);
-      router.push("/");
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#FFF6EC] p-4">
@@ -137,9 +141,12 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Forgot Password */}
+                {/* Forgot Password Link */}
                 <div className="flex justify-end">
-                  <span className="text-orange-500 font-semibold cursor-pointer hover:underline">
+                  <span
+                    className="text-orange-500 font-semibold cursor-pointer hover:underline"
+                    onClick={() => router.push('/forgot-password')}
+                  >
                     Forgot Password?
                   </span>
                 </div>
