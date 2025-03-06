@@ -65,7 +65,7 @@ export default function ChefRecommendations() {
           variant="ghost"
           className="swiper-button-prev absolute top-1/2 left-2 transform -translate-y-1/2 rounded-full bg-white/80 hover:bg-white p-1 h-8 w-8"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-4 w-2" />
         </Button>
         <Button
           variant="ghost"
