@@ -1,9 +1,14 @@
+'use client';
+
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import HistoryCard from "@/components/diner/HistoryCard";
 import ChefCard from "@/components/diner/ChefCard";
 import ChefRecommendations from "@/components/diner/ChefRecom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // Sample Data
 const orderHistory = [
@@ -37,11 +42,33 @@ const favoriteChefs = [
 ];
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const [user, setUser] = useState<{
+    email: string;
+    role: string;
+    name: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/api/auth/session");
+        console.log(res)
+        setUser(res.data);
+      } catch (error) {
+        console.error("Session fetch error:", error);
+        router.push("/auth/login");
+      }
+    };
+    fetchUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#FFF8EF] p-6 md:px-12 lg:px-24 py-6">
       {/* Welcome Section */}
       <div className="mb-8 border-b border-gray-200 pb-4 text-right">
-        <h1 className="text-2xl font-bold">Welcome, Full Name</h1>
+        <h1 className="text-2xl font-bold">Welcome, {user?.name}</h1>
       </div>
 
       {/* Main Content - Two Column Layout */}

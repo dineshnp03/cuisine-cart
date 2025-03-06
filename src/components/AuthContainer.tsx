@@ -1,6 +1,6 @@
 "use client";
 
-
+import Image from "next/image";
 import React from "react";
 
 interface AuthContainerProps {
@@ -9,12 +9,23 @@ interface AuthContainerProps {
 
 const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
   return (
-    <div className="h-screen w-full bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: "url('/images/loader_bg.jpg')" }}>
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        {children}
-      </div>
-    </div>
+    <>
+      <header className="bg-white shadow-md ">
+        <div className="container mx-auto flex justify-center items-center p-6">
+          <Image
+            src="/logo.png"
+            alt="Company Logo"
+            width={90}
+            height={90}
+            className="w-50 h-50 rounded"
+          />
+          <div className="text-2xl ms-3 font-bold text-gray-800">
+            Cuisine Cart
+          </div>
+        </div>
+      </header>
+      {children}
+    </>
   );
 };
 

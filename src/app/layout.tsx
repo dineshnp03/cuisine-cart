@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/core/header/Header";
 import Footer from "@/components/core/footer/Footer";
 import { connectToDatabase } from "@/lib/db";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,9 +17,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cuisine Cart",
-  description: "Your Favorite Cuisine Delivered",
+  title: "Cuisine Cart | Taste of Home",
+  description:
+    "Cuisine Cart connects international students, workers, and food enthusiasts to home-cooked meals made with love and authenticity.",
 };
+
+
 
 export default async function RootLayout({
   children,
@@ -29,9 +33,13 @@ export default async function RootLayout({
   
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen`}>
         <Header />
+        <div className="flex-grow">
+
         {children}
+        </div>
+        <Toaster position="top-right" richColors />
         <Footer />
       </body>
     </html>
