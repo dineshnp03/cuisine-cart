@@ -9,10 +9,40 @@ import {
 } from "@/components/ui/cheftabs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function ChefDashboard() {
+
+  const router = useRouter();
+  const [user, setUser] = useState<{
+    email: string;
+    role: string;
+    name: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/api/auth/session");
+        console.log(res)
+        setUser(res.data);
+      } catch (error) {
+        console.error("Session fetch error:", error);
+        router.push("/auth/login");
+      }
+    };
+    fetchUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className="p-6 space-y-6 mx-20">
+        <div className="min-h-screen bg-[#FFF8EF] p-6 md:px-12 lg:px-24 py-6">
+      {/* Welcome Section */}
+      <div className="mb-8 border-b border-gray-200 pb-4 text-right">
+        <h1 className="text-2xl font-bold">Welcome, {user?.name}</h1>
+      </div>
       {/* Top Section */}
       <div className="grid grid-cols-2 gap-6">
         <div className="flex flex-col space-y-6">
@@ -41,16 +71,15 @@ export default function ChefDashboard() {
 
       {/* Orders Section */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Your Orders</h2>
+        <h2 className="text-2xl font-bold my-5">Your Orders</h2>
         <Tabs defaultValue="incoming" className="w-full">
           <TabsList className="flex justify-start space-x-4">
             <TabsTrigger value="incoming">Incoming</TabsTrigger>
             <TabsTrigger value="inpreparation">In Preparation</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="incoming">
-            <div className="grid grid-cols-3 gap-4">
+    <TabsContent value="incoming" >
+            <div className="grid grid-cols-3 gap-4 bg-white rounded p-5">
               {[1].map((_, index) => (
                 <Card key={index} className="p-3 space-y-3">
                   <Image
@@ -83,6 +112,7 @@ export default function ChefDashboard() {
             No Completed Orders
             </div>
           </TabsContent>
+          
         </Tabs>
       </div>
     </div>
