@@ -25,6 +25,7 @@ export default function LoginPage() {
     try {
       const res = await axios.post("/api/auth/login", form);
       if (res.status === 200) {
+        localStorage.setItem("token", res.data.token);
         toast.success(" Login Success!", { description: "Logged In successfully." });
         if (role === "diner") {
           router.push("/diner/dashboard"); 
@@ -41,6 +42,7 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+  
 
 
   return (
@@ -148,9 +150,12 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Forgot Password */}
+                {/* Forgot Password Link */}
                 <div className="flex justify-end">
-                  <span className="text-orange-500 font-semibold cursor-pointer hover:underline">
+                  <span
+                    className="text-orange-500 font-semibold cursor-pointer hover:underline"
+                    onClick={() => router.push('/forgot-password')}
+                  >
                     Forgot Password?
                   </span>
                 </div>
