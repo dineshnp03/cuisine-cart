@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     if (!name || !email || !password || !role) {
       return NextResponse.json({ message: "Missing fields" }, { status: 400 });
     }
-
+    
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
