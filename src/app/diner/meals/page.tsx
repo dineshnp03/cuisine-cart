@@ -63,7 +63,7 @@ export default function DinerMealsPage() {
           <div key={meal._id} className="border rounded-lg overflow-hidden shadow-sm bg-white">
             {/* Meal image (placeholder or stored) */}
             <Image
-              src="https://via.placeholder.com/500x300?text=Meal+Image"
+              src="https://placehold.co//500x300?text=Meal+Image"
               alt={meal.name}
               width={400}
               height={250}
