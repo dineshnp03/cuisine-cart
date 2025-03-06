@@ -102,7 +102,7 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8">
+        <nav className="hidden lg:flex space-x-8">
           {user ? (
             (user.role === "chef" ? chefNavigation : dinerNavigation).map(
               (item) => (
@@ -142,7 +142,7 @@ export default function Header() {
         </nav>
 
         {/* Mobile Menu Toggle */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <button
             onClick={() => setMobileMenuOpen(true)}
             className="text-gray-800 focus:outline-none"
@@ -155,7 +155,7 @@ export default function Header() {
       {/* Mobile Menu */}
       <Dialog
         as="div"
-        className="md:hidden"
+        className="lg:hidden"
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
       >
@@ -200,7 +200,7 @@ export default function Header() {
             </nav>
 
             {user && (
-              <div className="text-center">
+              <div className="flex justify-center">
                 <button
                   onClick={handleLogout}
                   className="block bg-red-600 text-white py-3 px-8 rounded-full text-lg font-semibold mb-4 hover:bg-red-700 transition duration-300"
