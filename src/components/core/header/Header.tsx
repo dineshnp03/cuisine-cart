@@ -73,7 +73,6 @@ export default function Header() {
 
   // to open confirm modal for logout
   const openModal = () => setIsModalOpen(true);
-
   // to close the logout confirm modal
   const closeModal = () => setIsModalOpen(false);
 
@@ -104,38 +103,26 @@ export default function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex space-x-8">
           {user ? (
-            (user.role === "chef" ? chefNavigation : dinerNavigation).map(
-              (item) => (
-                <Link
-                  key={item.name}
-                  href={item.href || "/"}
-                  className="text-gray-600 hover:text-blue-600"
-                >
-                  {item.name}
-                </Link>
-              )
-            )
+            (user.role === "chef" ? chefNavigation : dinerNavigation).map((item) => (
+              <Link
+                key={item.name}
+                href={item.href || "/"}
+                className="text-gray-600 hover:text-blue-600">
+                {item.name}
+              </Link>
+            ))
           ) : (
             <>
-              <Link
-                href="/auth/login"
-                className="text-gray-600 hover:text-blue-600"
-              >
+              <Link href="/auth/login" className="text-gray-600 hover:text-blue-600">
                 Login
               </Link>
-              <Link
-                href="/auth/signup"
-                className="text-gray-600 hover:text-blue-600"
-              >
+              <Link href="/user-selection" className="text-gray-600 hover:text-blue-600">
                 Signup
               </Link>
             </>
           )}
           {user && (
-            <button
-              onClick={openModal}
-              className="text-red-600 hover:text-red-800"
-            >
+            <button onClick={openModal} className="text-red-600 hover:text-red-800">
               Logout
             </button>
           )}
@@ -145,8 +132,7 @@ export default function Header() {
         <div className="lg:hidden">
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="text-gray-800 focus:outline-none"
-          >
+            className="text-gray-800 focus:outline-none">
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
@@ -165,34 +151,26 @@ export default function Header() {
             {/* Logo Section */}
             <div className="text-center mb-6">
               <p className="text-3xl font-bold text-gray-800">Cuisine Cart</p>
+              <p className="text-3xl font-bold text-gray-800">Cuisine Cart</p>
             </div>
 
             <nav className="flex flex-col items-center space-y-6 mb-12">
               {user ? (
-                (user.role === "chef" ? chefNavigation : dinerNavigation).map(
-                  (item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href || "/"}
-                      className="text-xl text-gray-600 hover:text-blue-600"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  )
-                )
+                (user.role === "chef" ? chefNavigation : dinerNavigation).map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href || "/"}
+                    className="text-xl text-gray-600 hover:text-blue-600"
+                    onClick={() => setMobileMenuOpen(false)}>
+                    {item.name}
+                  </Link>
+                ))
               ) : (
                 <>
-                  <Link
-                    href="/auth/login"
-                    className="text-xl text-gray-600 hover:text-blue-600"
-                  >
+                  <Link href="/auth/login" className="text-xl text-gray-600 hover:text-blue-600">
                     Login
                   </Link>
-                  <Link
-                    href="/auth/signup"
-                    className="text-xl text-gray-600 hover:text-blue-600"
-                  >
+                  <Link href="/auth/signup" className="text-xl text-gray-600 hover:text-blue-600">
                     Signup
                   </Link>
                 </>
@@ -203,8 +181,7 @@ export default function Header() {
               <div className="flex justify-center">
                 <button
                   onClick={handleLogout}
-                  className="block bg-red-600 text-white py-3 px-8 rounded-full text-lg font-semibold mb-4 hover:bg-red-700 transition duration-300"
-                >
+                  className="block bg-red-600 text-white py-3 px-8 rounded-full text-lg font-semibold mb-4 hover:bg-red-700 transition duration-300">
                   Logout
                 </button>
               </div>
@@ -214,14 +191,15 @@ export default function Header() {
           <div className="absolute top-4 right-4">
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="text-gray-800 focus:outline-none"
-            >
+              className="text-gray-800 focus:outline-none">
               <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
         </div>
       </Dialog>
 
+      {/* Confirmation Modal */}
+      <Dialog open={isModalOpen} onClose={closeModal}>
       {/* Confirmation Modal */}
       <Dialog open={isModalOpen} onClose={closeModal}>
         <div className="fixed inset-0 z-10 bg-black bg-opacity-50" />
@@ -236,14 +214,12 @@ export default function Header() {
             <div className="mt-6 flex justify-end space-x-4">
               <button
                 onClick={closeModal}
-                className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md"
-              >
+                className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md">
                 Cancel
               </button>
               <button
                 onClick={confirmLogout}
-                className=" bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md"
-              >
+                className=" bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md">
                 Logout
               </button>
             </div>
