@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ResetPasswordClient() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  // Safe to use because this is a Client Component
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
@@ -20,13 +20,24 @@ export default function ResetPasswordClient() {
       body: JSON.stringify({ token, password }),
     });
 
-    const data = await res.json();
-    setMessage(data.message);
+    if (res.ok) {
+      const data = await res.json();
+      setMessage(data.message);
+      toast.success("Password reset successful", {
+        description: "Your password has been updated.",
+      });
+    } else {
+      const errorData = await res.text();
+      console.error(errorData); 
+      toast.error("Password reset failed", {
+        description: `Error: ${errorData}`,
+      });
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleResetPassword} className="bg-white p-6 rounded-lg shadow-md">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/images/login-bg.jpg')] bg-cover bg-no-repeat">
+      <form onSubmit={handleResetPassword} className="bg-white p-6 rounded-lg shadow-md backdrop-blur-md bg-opacity-80">
         <h2 className="text-xl font-bold mb-4">Reset Password</h2>
         <input
           type="password"
