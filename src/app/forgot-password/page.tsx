@@ -26,8 +26,8 @@ setMessage(data.message);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleForgotPassword} className="bg-white p-6 rounded-lg shadow-md">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-[url('/images/login-bg.jpg')] bg-cover bg-no-repeat">
+      <form onSubmit={handleForgotPassword} className="bg-white p-6 rounded-lg shadow-md backdrop-blur-md bg-opacity-80">
         <h2 className="text-xl font-bold mb-4">Forgot Password</h2>
         <input
           type="email"
@@ -37,7 +37,7 @@ setMessage(data.message);
           className="w-full p-2 border rounded mb-3"
           required
         />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">Send Reset Link</button>
+        <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white p-2 rounded">Send Reset Link</button>
         {message && <p className="text-sm mt-2">{message}</p>}
       </form>
     </div>
