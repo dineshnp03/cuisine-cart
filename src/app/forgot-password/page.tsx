@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -14,17 +15,25 @@ export default function ForgotPasswordPage() {
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ email }),
 });
-
+// Error handling before processing the response
 if (!res.ok) {
   const errorData = await res.text();
-  console.error(errorData); // Log the raw error response to debug
-  throw new Error(`Error: ${res.status} - ${errorData}`);
+  console.error(errorData); 
+  toast.error("Could not send reset link!", {
+    description: `Error: ${errorData}`,
+  });
+  return; 
 }
 
+// If the response is successful
 const data = await res.json();
 setMessage(data.message);
-  };
 
+// Show success toast
+toast.success("Reset link sent", {
+  description: "Check your email for the reset link.",
+});
+};
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full bg-[url('/images/login-bg.jpg')] bg-cover bg-no-repeat">
       <form onSubmit={handleForgotPassword} className="bg-white p-6 rounded-lg shadow-md backdrop-blur-md bg-opacity-80">
