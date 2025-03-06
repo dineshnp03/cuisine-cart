@@ -25,6 +25,7 @@ export default function LoginPage() {
     try {
       const res = await axios.post("/api/auth/login", form);
       if (res.status === 200) {
+        localStorage.setItem("token", res.data.token);
         toast.success(" Login Success!", { description: "Logged In successfully." });
         if (role === "diner") {
           router.push("/diner/dashboard"); 
