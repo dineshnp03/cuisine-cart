@@ -47,7 +47,7 @@ export default function ResetPasswordClient() {
           className="w-full p-2 border rounded mb-3"
           required
         />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+        <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white p-2 rounded">
           Reset Password
         </button>
         {message && <p className="text-sm mt-2">{message}</p>}
