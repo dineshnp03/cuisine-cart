@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/core/header/Header";
 import Footer from "@/components/core/footer/Footer";
 import { connectToDatabase } from "@/lib/db";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header />
         {children}
+        <Toaster position="top-right" richColors />
         <Footer />
       </body>
     </html>

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import Loader from "@/components/Loader";
 import Image from "next/image";
 import axios from 'axios';
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,13 +25,17 @@ export default function LoginPage() {
     try {
       const res = await axios.post("/api/auth/login", form);
       if (res.status === 200) {
+        toast.success(" Login Success!", { description: "Logged In successfully." });
         if (role === "diner") {
-          router.push("/diner/dashboard"); // Redirect to the diner page
+          router.push("/diner/dashboard"); 
         } else {
           router.push("/"); // Default redirect
         }
+      } else {
+        toast.error("Invalid Credentials", { description: "Please check your email and password." });
       }
     } catch (error) {
+      toast.error("Error!", { description: `Something went wrong!, Please try Again ${error}` });
       console.error(error);
     } finally {
       setLoading(false);

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { Loader } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -40,14 +41,27 @@ export default function SignupPage() {
             role: form.role,
           };
           const res = await axios.post("/api/auth/signup", requsetBody);
-          if (res.status === 201) router.push("/auth/login");
+          if (res.status === 201) {
+            toast.success("Signup Successful!", {
+              description: "Your account has been created.",
+            });
+            router.push("/auth/login"); 
+          }
         } else {
-          alert("Passwords do not match");
+          toast.error("Signup Failed!", {
+            description: "Passwords do not match, Please try again.",
+          });
         }
-      } else {
+      } else { 
+        toast.error("Signup Failed!", {
+        description: "Please fill all the fields.",
+      });
         alert("Please fill all the fields");
       }
     } catch (error) {
+      toast.error("Signup Failed!", {
+        description: `${error}`,
+      });
       console.error(error);
     } finally {
       setLoading(false);
