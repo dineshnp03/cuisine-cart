@@ -1,91 +1,128 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import { Dialog } from "@headlessui/react";
+import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-const publicNav = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "#services" },
-  { name: "Contact", href: "#contact" },
-];
+interface User {
+  email: string;
+  role: string; 
+  name: string;
+}
 
-const protectedNav = [{ name: "Profile", href: "/profile" }];
-
-const chefNav = [
-  { name: "Manage Dishes", href: "/chef/dishes" },
-  { name: "Manage Meals", href: "/chef/meals" },
-];
-
-const dinerNav = [{ name: "View Meals", href: "/diner/meals" }];
 
 export default function Header() {
-  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [role, setRole] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedRole = localStorage.getItem("role");
-    if (token) {
-      setIsLoggedIn(true);
-    }
-    if (storedRole) {
-      setRole(storedRole);
-    }
-  }, []);
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/api/auth/session");
+        if (res.status === 200) {
+          console.log(res);
+          setUser(res.data);
+        }
+      } catch {
+        setUser(null);
+      }
+    };
+    fetchUser();
+  }, [pathname]);
 
-  // Logging out
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    setIsLoggedIn(false);
-    setRole(null);
-    router.push("/");
+  const chefNavigation = [
+    { name: "Dashboard", href: "/chef/dashboard" },
+    { name: "Meals", href: "/chef/meals" },
+    { name: "Dishes", href: "/chef/dishes" },
+    { name: "Subscribers", href: "/chef/subscribers" },
+    { name: "Profile", href: "/chef/profile" },
+  ];
+
+  const dinerNavigation = [
+    { name: "Dashboard", href: "/diner/dashboard" },
+    { name: "Meals", href: "/diner/meals" },
+    { name: "Chefs", href: "/diner/chefs" },
+    { name: "My Subscription", href: "/diner/subscriptions" },
+    { name: "Profile", href: "/diner/profile" },
+  ];
+
+  // Hide header on login and signup pages
+  if (pathname === "/auth/login" || pathname === "/auth/signup") {
+    return null;
+  }
+
+  // Logout functionality
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/auth/logout");
+      setUser(null);
+      toast.info("Logout Successful!", { description: "Session has been logged out." });
+      router.push("/auth/login");
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
-  // Construct nav items
-  let navItems = [];
-  if (!isLoggedIn) {
-    navItems = [...publicNav];
-  } else {
-    navItems = [...protectedNav];
-    if (role === "chef") {
-      navItems.push(...chefNav);
-    }
-    if (role === "diner") {
-      navItems.push(...dinerNav);
-    }
-  }
+
+    // to open confirm modal for logout
+    const openModal = () => setIsModalOpen(true);
+
+    // to close the logout confirm modal
+    const closeModal = () => setIsModalOpen(false);
+  
+    // If confirmed, calling the logout function and closing the mdoal.
+    const confirmLogout = () => {
+      handleLogout();
+      closeModal();
+    };
 
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-6">
-        <div className="text-2xl font-bold text-gray-800">
-          <Link href="/">Cuisine Cart</Link>
-        </div>
+        {/* Logo */}
+        <div className="text-2xl font-bold text-gray-800">Cuisine Cart</div>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex space-x-6">
-          {navItems.map((item) => (
-            <Link key={item.name} href={item.href} className="text-gray-600 hover:text-blue-600">
-              {item.name}
-            </Link>
-          ))}
-
-          {!isLoggedIn && (
-            <Link href="/auth/login" className="text-gray-600 hover:text-blue-600">
-              Login
-            </Link>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex space-x-8">
+          {user ? (
+            (user.role === "chef" ? chefNavigation : dinerNavigation).map(
+              (item) => (
+                <Link
+                  key={item.name}
+                  href={item.href || "/"}
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  {item.name}
+                </Link>
+              )
+            )
+          ) : (
+            <>
+              <Link
+                href="/auth/login"
+                className="text-gray-600 hover:text-blue-600"
+              >
+                Login
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="text-gray-600 hover:text-blue-600"
+              >
+                Signup
+              </Link>
+            </>
           )}
-
-          {isLoggedIn && (
-            <button onClick={handleLogout} className="text-gray-600 hover:text-blue-600">
+          {user && (
+            <button
+              onClick={openModal}
+              className="text-red-600 hover:text-red-800"
+            >
               Logout
             </button>
           )}
@@ -95,74 +132,111 @@ export default function Header() {
         <div className="md:hidden">
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="text-gray-800 focus:outline-none">
-            <Bars3Icon className="h-6 w-6" />
+            className="text-gray-800 focus:outline-none"
+          >
+            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <Dialog as="div" className="md:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+      <Dialog
+        as="div"
+        className="md:hidden"
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+      >
         <div className="fixed inset-0 z-10 bg-black bg-opacity-50" />
         <div className="fixed inset-0 z-20 flex flex-col justify-between items-center bg-white">
-          <Dialog.Panel className="w-full h-full p-6 flex flex-col justify-between">
+          <DialogPanel className="w-full h-full p-6 flex flex-col justify-between">
+            {/* Logo Section */}
             <div className="text-center mb-6">
-              <Link href="/" className="text-3xl font-bold text-gray-800">
+              <p className="text-3xl font-bold text-gray-800">
                 Cuisine Cart
-              </Link>
+              </p>
             </div>
 
             <nav className="flex flex-col items-center space-y-6 mb-12">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-xl text-gray-600 hover:text-blue-600"
-                  onClick={() => setMobileMenuOpen(false)}>
-                  {item.name}
-                </Link>
-              ))}
-
-              {!isLoggedIn && (
-                <Link
-                  href="/auth/login"
-                  className="text-xl text-gray-600 hover:text-blue-600"
-                  onClick={() => setMobileMenuOpen(false)}>
-                  Login
-                </Link>
-              )}
-
-              {isLoggedIn && (
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="text-xl text-gray-600 hover:text-blue-600">
-                  Logout
-                </button>
+              {user ? (
+                (user.role === "chef" ? chefNavigation : dinerNavigation).map(
+                  (item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href || "/"}
+                      className="text-xl text-gray-600 hover:text-blue-600"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  )
+                )
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="text-xl text-gray-600 hover:text-blue-600"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/auth/signup"
+                    className="text-xl text-gray-600 hover:text-blue-600"
+                  >
+                    Signup
+                  </Link>
+                </>
               )}
             </nav>
 
-            <div className="text-center">
-              <a
-                href="mailto:support@cuisinecart.com"
-                className="block bg-orange-600 text-white py-3 px-8 rounded-full text-lg font-semibold mb-4 hover:bg-orange-700 transition duration-300">
-                Contact Us
-              </a>
-              <div className="text-gray-600 text-lg">Phone: (123) 456-7890</div>
-            </div>
-          </Dialog.Panel>
+            {user && (
+              <div className="text-center">
+                <button
+                  onClick={handleLogout}
+                  className="block bg-red-600 text-white py-3 px-8 rounded-full text-lg font-semibold mb-4 hover:bg-red-700 transition duration-300"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </DialogPanel>
 
           <div className="absolute top-4 right-4">
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="text-gray-800 focus:outline-none">
-              <XMarkIcon className="h-6 w-6" />
+              className="text-gray-800 focus:outline-none"
+            >
+              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
         </div>
       </Dialog>
+
+
+    {/* Confirmation Modal */}
+    <Dialog open={isModalOpen} onClose={closeModal}>
+        <div className="fixed inset-0 z-10 bg-black bg-opacity-50" />
+        <DialogPanel className="fixed inset-0 z-20 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 className="text-xl font-semibold text-gray-800">Confirm Logout</h3>
+            <p className="text-gray-600 mt-4">Are you sure you want to log out?</p>
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                onClick={closeModal}
+                className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmLogout}
+                className=" bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </DialogPanel>
+      </Dialog>
+
     </header>
   );
 }

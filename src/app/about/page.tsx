@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "About Us | Cuisine Cart",
@@ -82,29 +81,17 @@ export default function About() {
           <h2 className="text-3xl font-bold mb-6">Meet Our Team</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-lg">
-              <Image
-                src="/team1.jpg"
-                alt="Team Member"
-                className="w-24 h-24 rounded-full mx-auto mb-4"
-              />
+              
               <h3 className="text-xl font-semibold mb-2">Sarah Kim</h3>
               <p className="text-sm">Founder & CEO</p>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-lg">
-              <Image
-                src="/team2.jpg"
-                alt="Team Member"
-                className="w-24 h-24 rounded-full mx-auto mb-4"
-              />
+             
               <h3 className="text-xl font-semibold mb-2">John Doe</h3>
               <p className="text-sm">Co-Founder & Chief Operations</p>
             </div>
             <div className="bg-white p-8 rounded-lg shadow-lg">
-              <Image
-                src="/team3.jpg"
-                alt="Team Member"
-                className="w-24 h-24 rounded-full mx-auto mb-4"
-              />
+              
               <h3 className="text-xl font-semibold mb-2">Emily Tan</h3>
               <p className="text-sm">Marketing Director</p>
             </div>

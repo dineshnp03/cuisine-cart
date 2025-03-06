@@ -17,9 +17,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cuisine Cart",
-  description: "Your Favorite Cuisine Delivered",
+  title: "Cuisine Cart | Taste of Home",
+  description:
+    "Cuisine Cart connects international students, workers, and food enthusiasts to home-cooked meals made with love and authenticity.",
 };
+
+
 
 export default async function RootLayout({
   children,
