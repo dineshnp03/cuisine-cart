@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/cheftabs";
-import OrderCard from "@/components/chef/DishCard";
+import DishCard from "@/components/chef/DishCard";
 
 export default function OrdersTabs() {
   return (
@@ -16,7 +16,8 @@ export default function OrdersTabs() {
         {/* Incoming Orders */}
         <TabsContent value="incoming">
           <div className="mt-4">
-            <OrderCard
+            <DishCard
+              imageUrl="/images/order-history.jpg"
               foodName="Biriyani"
               description="Spicy and flavorful chicken biriyani."
               price="$12.99"
@@ -27,14 +28,14 @@ export default function OrdersTabs() {
         {/* In Preparation - No Data */}
         <TabsContent value="inpreparation">
           <div className="flex items-center justify-center h-40 text-gray-500">
-            No Data
+            No In Preparation Orders
           </div>
         </TabsContent>
 
         {/* Completed - No Data */}
         <TabsContent value="completed">
           <div className="flex items-center justify-center h-40 text-gray-500">
-            No Data
+            No Completed Orders
           </div>
         </TabsContent>
       </Tabs>

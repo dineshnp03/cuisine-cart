@@ -1,15 +1,24 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/chefcard";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
-interface OrderCardProps {
+interface DishCardProps {
+  imageUrl: string;
   foodName: string;
   description: string;
   price: string;
 }
 
-export default function OrderCard({ foodName, description, price }: OrderCardProps) {
+export default function DishCard({ imageUrl, foodName, description, price }: DishCardProps) {
   return (
     <Card className="border border-gray-200 shadow-sm">
+      <Image
+        src={imageUrl}
+        alt={foodName}
+        width={300}
+        height={200}
+        className="w-full h-40 object-cover rounded-t-xl"
+      />
       <CardHeader>
         <h3 className="text-lg font-semibold">{foodName}</h3>
       </CardHeader>
