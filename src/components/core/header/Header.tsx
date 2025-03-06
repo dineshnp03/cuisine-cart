@@ -5,6 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface User {
   email: string;
@@ -16,7 +17,7 @@ interface User {
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const pathname = usePathname();
   const router = useRouter();
 
@@ -56,16 +57,31 @@ export default function Header() {
     return null;
   }
 
-  // Logout function
+  // Logout functionality
   const handleLogout = async () => {
     try {
       await axios.post("/api/auth/logout");
       setUser(null);
+      toast.info("Logout Successful!", { description: "Session has been logged out." });
       router.push("/auth/login");
     } catch (error) {
       console.error("Logout failed", error);
     }
   };
+
+
+    // to open confirm modal for logout
+    const openModal = () => setIsModalOpen(true);
+
+    // to close the logout confirm modal
+    const closeModal = () => setIsModalOpen(false);
+  
+    // If confirmed, calling the logout function and closing the mdoal.
+    const confirmLogout = () => {
+      handleLogout();
+      closeModal();
+    };
+
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-6">
@@ -104,7 +120,7 @@ export default function Header() {
           )}
           {user && (
             <button
-              onClick={handleLogout}
+              onClick={openModal}
               className="text-red-600 hover:text-red-800"
             >
               Logout
@@ -194,6 +210,33 @@ export default function Header() {
           </div>
         </div>
       </Dialog>
+
+
+    {/* Confirmation Modal */}
+    <Dialog open={isModalOpen} onClose={closeModal}>
+        <div className="fixed inset-0 z-10 bg-black bg-opacity-50" />
+        <DialogPanel className="fixed inset-0 z-20 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 className="text-xl font-semibold text-gray-800">Confirm Logout</h3>
+            <p className="text-gray-600 mt-4">Are you sure you want to log out?</p>
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                onClick={closeModal}
+                className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmLogout}
+                className=" bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </DialogPanel>
+      </Dialog>
+
     </header>
   );
 }
