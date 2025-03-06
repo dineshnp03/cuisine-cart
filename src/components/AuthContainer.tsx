@@ -17,7 +17,7 @@ const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
             alt="Company Logo"
             width={90}
             height={90}
-            className="w-50 h-50"
+            className="w-50 h-50 rounded"
           />
           <div className="text-2xl ms-3 font-bold text-gray-800">
             Cuisine Cart

@@ -2,6 +2,7 @@
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,15 +10,14 @@ import { toast } from "sonner";
 
 interface User {
   email: string;
-  role: string; 
+  role: string;
   name: string;
 }
-
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -62,31 +62,44 @@ export default function Header() {
     try {
       await axios.post("/api/auth/logout");
       setUser(null);
-      toast.info("Logout Successful!", { description: "Session has been logged out." });
+      toast.info("Logout Successful!", {
+        description: "Session has been logged out.",
+      });
       router.push("/auth/login");
     } catch (error) {
       console.error("Logout failed", error);
     }
   };
 
+  // to open confirm modal for logout
+  const openModal = () => setIsModalOpen(true);
 
-    // to open confirm modal for logout
-    const openModal = () => setIsModalOpen(true);
+  // to close the logout confirm modal
+  const closeModal = () => setIsModalOpen(false);
 
-    // to close the logout confirm modal
-    const closeModal = () => setIsModalOpen(false);
-  
-    // If confirmed, calling the logout function and closing the mdoal.
-    const confirmLogout = () => {
-      handleLogout();
-      closeModal();
-    };
+  // If confirmed, calling the logout function and closing the mdoal.
+  const confirmLogout = () => {
+    handleLogout();
+    closeModal();
+  };
 
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-6">
-        {/* Logo */}
-        <div className="text-2xl font-bold text-gray-800">Cuisine Cart</div>
+        <div className="flex items-center">
+        <Image
+            src="/logo.png"
+            alt="Company Logo"
+            width={90}
+            height={90}
+            className="w-50 h-50 me-3 rounded"
+          />
+        <p className="text-2xl font-bold text-gray-800">
+          {" "}
+         
+          Cuisine Cart
+        </p>
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8">
@@ -151,9 +164,7 @@ export default function Header() {
           <DialogPanel className="w-full h-full p-6 flex flex-col justify-between">
             {/* Logo Section */}
             <div className="text-center mb-6">
-              <p className="text-3xl font-bold text-gray-800">
-                Cuisine Cart
-              </p>
+              <p className="text-3xl font-bold text-gray-800">Cuisine Cart</p>
             </div>
 
             <nav className="flex flex-col items-center space-y-6 mb-12">
@@ -211,14 +222,17 @@ export default function Header() {
         </div>
       </Dialog>
 
-
-    {/* Confirmation Modal */}
-    <Dialog open={isModalOpen} onClose={closeModal}>
+      {/* Confirmation Modal */}
+      <Dialog open={isModalOpen} onClose={closeModal}>
         <div className="fixed inset-0 z-10 bg-black bg-opacity-50" />
         <DialogPanel className="fixed inset-0 z-20 flex justify-center items-center">
           <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
-            <h3 className="text-xl font-semibold text-gray-800">Confirm Logout</h3>
-            <p className="text-gray-600 mt-4">Are you sure you want to log out?</p>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Confirm Logout
+            </h3>
+            <p className="text-gray-600 mt-4">
+              Are you sure you want to log out?
+            </p>
             <div className="mt-6 flex justify-end space-x-4">
               <button
                 onClick={closeModal}
@@ -236,7 +250,6 @@ export default function Header() {
           </div>
         </DialogPanel>
       </Dialog>
-
     </header>
   );
 }

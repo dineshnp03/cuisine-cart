@@ -12,7 +12,7 @@ const Footer = () => {
             alt="Company Logo"
             width={120}
             height={120}
-            className="w-50 h-50"
+            className="w-50 h-50 rounded"
           />
           <h1 className="font-bold text-xl">Cuisine Cart</h1>
           <p className="text-sm mt-4 text-gray-400">

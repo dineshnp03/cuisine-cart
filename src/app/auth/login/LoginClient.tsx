@@ -110,7 +110,7 @@ export default function LoginPage() {
             {/* Right Side - Form Section */}
             <div className="relative w-full md:w-1/2 flex flex-col items-center p-10">
               {/* Half Circle at the Top */}
-              <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2 w-[200px] h-[120px] bg-orange-500 rounded-b-full flex items-center justify-center">
+              <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2 w-[300px] h-[120px] bg-orange-500 rounded-b-full flex items-center justify-center">
                 <h2 className="text-2xl mt-10 font-semibold text-black">
                   {roleQueryParam ? `Login as ${roleQueryParam}` : "Login"}
                 </h2>
