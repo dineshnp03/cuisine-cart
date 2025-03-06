@@ -26,6 +26,7 @@ export default function Header() {
       try {
         const res = await axios.get("/api/auth/session");
         if (res.status === 200) {
+          console.log(res);
           setUser(res.data);
         }
       } catch {
@@ -56,6 +57,7 @@ export default function Header() {
     return null;
   }
 
+  // Logout functionality
   const handleLogout = async () => {
     try {
       await axios.post("/api/auth/logout");
@@ -69,19 +71,43 @@ export default function Header() {
     }
   };
 
+  // to open confirm modal for logout
+  const openModal = () => setIsModalOpen(true);
+  // to close the logout confirm modal
+  const closeModal = () => setIsModalOpen(false);
+
+  // If confirmed, calling the logout function and closing the mdoal.
+  const confirmLogout = () => {
+    handleLogout();
+    closeModal();
+  };
+
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-6">
         <div className="flex items-center">
-          <Image src="/logo.png" alt="Company Logo" width={90} height={90} className="w-12 h-12 rounded" />
-          <p className="text-2xl font-bold text-gray-800 ml-3">Cuisine Cart</p>
+        <Image
+            src="/logo.png"
+            alt="Company Logo"
+            width={90}
+            height={90}
+            className="w-50 h-50 me-3 rounded"
+          />
+        <p className="text-2xl font-bold text-gray-800">
+          {" "}
+         
+          Cuisine Cart
+        </p>
         </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex space-x-8">
           {user ? (
             (user.role === "chef" ? chefNavigation : dinerNavigation).map((item) => (
-              <Link key={item.name} href={item.href} className="text-gray-600 hover:text-blue-600">
+              <Link
+                key={item.name}
+                href={item.href || "/"}
+                className="text-gray-600 hover:text-blue-600">
                 {item.name}
               </Link>
             ))
@@ -96,68 +122,106 @@ export default function Header() {
             </>
           )}
           {user && (
-            <button onClick={() => setIsModalOpen(true)} className="text-red-600 hover:text-red-800">
+            <button onClick={openModal} className="text-red-600 hover:text-red-800">
               Logout
             </button>
           )}
         </nav>
 
         {/* Mobile Menu Toggle */}
-        <button onClick={() => setMobileMenuOpen(true)} className="lg:hidden text-gray-800 focus:outline-none">
-          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-        </button>
+        <div className="lg:hidden">
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="text-gray-800 focus:outline-none">
+            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
-      <Dialog as="div" className="lg:hidden fixed inset-0 z-50" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-        <div className="fixed inset-0 bg-black bg-opacity-50" />
-        <DialogPanel className="fixed inset-0 z-50 flex flex-col bg-white w-64 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <p className="text-2xl font-bold text-gray-800">Cuisine Cart</p>
-            <button onClick={() => setMobileMenuOpen(false)} className="text-gray-800">
-              <XMarkIcon className="h-6 w-6" />
+      <Dialog
+        as="div"
+        className="lg:hidden"
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+      >
+        <div className="fixed inset-0 z-10 bg-black bg-opacity-50" />
+        <div className="fixed inset-0 z-20 flex flex-col justify-between items-center bg-white">
+          <DialogPanel className="w-full h-full p-6 flex flex-col justify-between">
+            {/* Logo Section */}
+            <div className="text-center mb-6">
+              <p className="text-3xl font-bold text-gray-800">Cuisine Cart</p>
+              <p className="text-3xl font-bold text-gray-800">Cuisine Cart</p>
+            </div>
+
+            <nav className="flex flex-col items-center space-y-6 mb-12">
+              {user ? (
+                (user.role === "chef" ? chefNavigation : dinerNavigation).map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href || "/"}
+                    className="text-xl text-gray-600 hover:text-blue-600"
+                    onClick={() => setMobileMenuOpen(false)}>
+                    {item.name}
+                  </Link>
+                ))
+              ) : (
+                <>
+                  <Link href="/auth/login" className="text-xl text-gray-600 hover:text-blue-600">
+                    Login
+                  </Link>
+                  <Link href="/auth/signup" className="text-xl text-gray-600 hover:text-blue-600">
+                    Signup
+                  </Link>
+                </>
+              )}
+            </nav>
+
+            {user && (
+              <div className="flex justify-center">
+                <button
+                  onClick={handleLogout}
+                  className="block bg-red-600 text-white py-3 px-8 rounded-full text-lg font-semibold mb-4 hover:bg-red-700 transition duration-300">
+                  Logout
+                </button>
+              </div>
+            )}
+          </DialogPanel>
+
+          <div className="absolute top-4 right-4">
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-gray-800 focus:outline-none">
+              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
-
-          <nav className="flex flex-col space-y-4">
-            {user ? (
-              (user.role === "chef" ? chefNavigation : dinerNavigation).map((item) => (
-                <Link key={item.name} href={item.href} className="text-lg text-gray-600 hover:text-blue-600">
-                  {item.name}
-                </Link>
-              ))
-            ) : (
-              <>
-                <Link href="/auth/login" className="text-lg text-gray-600 hover:text-blue-600">
-                  Login
-                </Link>
-                <Link href="/auth/signup" className="text-lg text-gray-600 hover:text-blue-600">
-                  Signup
-                </Link>
-              </>
-            )}
-            {user && (
-              <button onClick={handleLogout} className="text-lg text-red-600 hover:text-red-800">
-                Logout
-              </button>
-            )}
-          </nav>
-        </DialogPanel>
+        </div>
       </Dialog>
 
-      {/* Logout Confirmation Modal */}
-      <Dialog as="div" className="fixed inset-0 z-50 flex items-center justify-center" open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="fixed inset-0 bg-black bg-opacity-50" />
-        <DialogPanel className="relative z-50 bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-          <h3 className="text-lg font-semibold text-gray-800">Confirm Logout</h3>
-          <p className="text-gray-600 mt-2">Are you sure you want to log out?</p>
-          <div className="mt-4 flex justify-end space-x-3">
-            <button onClick={() => setIsModalOpen(false)} className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md">
-              Cancel
-            </button>
-            <button onClick={handleLogout} className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md">
-              Logout
-            </button>
+
+      {/* Confirmation Modal */}
+      <Dialog open={isModalOpen} onClose={closeModal}>
+        <div className="fixed inset-0 z-10 bg-black bg-opacity-50" />
+        <DialogPanel className="fixed inset-0 z-20 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 className="text-xl font-semibold text-gray-800">
+              Confirm Logout
+            </h3>
+            <p className="text-gray-600 mt-4">
+              Are you sure you want to log out?
+            </p>
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                onClick={closeModal}
+                className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md">
+                Cancel
+              </button>
+              <button
+                onClick={confirmLogout}
+                className=" bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md">
+                Logout
+              </button>
+            </div>
           </div>
         </DialogPanel>
       </Dialog>
