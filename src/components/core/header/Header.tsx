@@ -65,7 +65,7 @@ export default function Header() {
       toast.info("Logout Successful!", {
         description: "Session has been logged out.",
       });
-      router.push("/auth/login");
+      router.push("/");
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -197,7 +197,6 @@ export default function Header() {
           </div>
         </div>
       </Dialog>
-
 
       {/* Confirmation Modal */}
       <Dialog open={isModalOpen} onClose={closeModal}>
