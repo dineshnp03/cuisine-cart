@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from 'next/image';
 
 interface Dish {
   _id: string;
@@ -64,7 +65,7 @@ export default function ChefDishesPage() {
             key={dish._id}
             className="border rounded-lg overflow-hidden shadow-sm bg-white flex flex-col">
             {/* Dish Image (fallback to placehold.co if no photoUrl) */}
-            <img
+            <Image
               src={dish.photoUrl || "https://placehold.co/600x400?text=No+Dish+Image"}
               alt={dish.name}
               className="h-48 w-full object-cover"
