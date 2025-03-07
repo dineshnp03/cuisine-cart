@@ -66,7 +66,7 @@ export default function LoginPage() {
         if (roleQueryParam === "diner") {
           router.push("/diner/dashboard");
         } else if (roleQueryParam === "chef") {
-          router.push("/chef/dishes");
+          router.push("/chef/dashboard");
         } else {
           router.push("/");
         }
