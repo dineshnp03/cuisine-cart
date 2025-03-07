@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
+import Image from "next/image";
 
 export default function ChefProfilePage() {
   const [userData, setUserData] = useState<any>(null); // To store user data
@@ -28,7 +28,7 @@ export default function ChefProfilePage() {
     };
 
     fetchUserData();
-  }, []);
+  }, [router]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -45,7 +45,7 @@ export default function ChefProfilePage() {
         
         {/* Profile Icon */}
         <div className="absolute -top-12 sm:-top-16 left-4 sm:left-6 w-24 h-24 sm:w-32 sm:h-32 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-200">
-          <img src="/icons/user-icon.svg" alt="Profile Icon" className="w-12 h-12 sm:w-16 sm:h-16 p-2" />
+          <Image src="/icons/user-icon.svg" alt="Profile Icon" className="w-12 h-12 sm:w-16 sm:h-16 p-2" />
         </div>
   
         {/* Profile Name */}
