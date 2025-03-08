@@ -23,45 +23,85 @@ export default function SignupPage() {
     confirmPassword: "",
     role: "",
   });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const nameRegex = /^(?! )[A-Za-z]+(?: [A-Za-z]+)*$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
 
   useEffect(() => {
     const storedRole = localStorage.getItem("role") || "";
     setForm((prev) => ({ ...prev, role: storedRole }));
   }, []);
 
+  // Validate Form Inputs
+  const validateFormInputs = () => {
+    let isValid: boolean = true;
+
+    const errors = {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    if (!nameRegex.test(form.name)) {
+      errors.name = "Name must be alphabets and spaces only.";
+      isValid = false;
+    }
+    if (!emailRegex.test(form.email)) {
+      errors.email = "Invalid email address.";
+      isValid = false;
+    }
+    if (!passwordRegex.test(form.password)) {
+      errors.password = `Password must be valid format.`;
+      isValid = false;
+    }
+    if (!form.confirmPassword) {
+      errors.confirmPassword = "Confirm Password is required.";
+      isValid = false;
+    }
+    if (form.password !== form.confirmPassword) {
+      errors.confirmPassword = "Passwords do not match.";
+      isValid = false;
+    }
+    setErrors(errors);
+    return isValid;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    if (!validateFormInputs()) {
+      setLoading(false);
+      toast.error("Invalid inputs", {
+        description: "Please provide valid details",
+      });
+      return;
+    }
     try {
-      if (form.name && form.email && form.password && form.confirmPassword) {
-        if (form.password === form.confirmPassword) {
-          const requsetBody = {
-            name: form.name,
-            email: form.email,
-            password: form.password,
-            role: form.role,
-          };
-          const res = await axios.post("/api/auth/signup", requsetBody);
-          if (res.status === 201) {
-            toast.success("Signup Successful!", {
-              description: "Your account has been created.",
-            });
-            router.push("/auth/login");
-          }
-        } else {
-          toast.error("Signup Failed!", {
-            description: "Passwords do not match, Please try again.",
-          });
-        }
-      } else {
-        toast.error("Signup Failed!", {
-          description: "Please fill all the fields.",
+      const requsetBody = {
+        name: form.name.trim(),
+        email: form.email.trim().toLowerCase(),
+        password: form.password.trim(),
+        role: form.role.trim(),
+      };
+      const res = await axios.post("/api/auth/signup", requsetBody);
+      if (res.status === 201) {
+        toast.success("Signup Successful!", {
+          description: "Your account has been created.",
         });
-        alert("Please fill all the fields");
-      }
-    } catch (error) {
-      toast.error("Signup Failed!", {
-        description: `${error}`,
+        router.push("/auth/login");
+      } 
+    } catch (error: any) {
+      toast.error(`${error.response.data.error}`, {
+        description: `Please try again with valid input details.`,
       });
       console.error(error);
     } finally {
@@ -99,7 +139,7 @@ export default function SignupPage() {
                 </h2>
               </div>
 
-              <div className="relative w-full flex flex-col items-center  lg:p-10 mt-20 pt-20">
+              <div className="relative w-full flex flex-col items-center  lg:p-10 py-8">
                 {/* Form Section */}
                 <form
                   onSubmit={handleSubmit}
@@ -130,6 +170,9 @@ export default function SignupPage() {
                         className="w-full h-12 p-3 pl-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
+                    {errors.name && (
+                      <p className="text-red-500 text-xs  font-bold">{errors.name}</p>
+                    )}
                   </div>
                   {/* Email Input */}
                   <div className="mb-3">
@@ -156,6 +199,9 @@ export default function SignupPage() {
                         className="w-full h-12 p-3 pl-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
+                    {errors.email && (
+                      <p className="text-red-500 text-xs  font-bold">{errors.email}</p>
+                    )}
                   </div>
 
                   {/* Password Input */}
@@ -199,6 +245,16 @@ export default function SignupPage() {
                         />
                       </span>
                     </div>
+                    {errors.password && (
+                      <p className="text-red-500 text-xs font-bold">{errors.password}</p>
+                    )}
+                    <p className="text-gray-600 text-xs">
+                      Password must be 8-16 characters, include at least:
+                      <br />✔ One uppercase letter
+                      <br />✔ One lowercase letter
+                      <br />✔ One number
+                      <br />✔ One special character (@, #, $, etc.)
+                    </p>
                   </div>
                   {/* Retype -Password Input */}
                   <div className="relative mb-3">
@@ -243,6 +299,7 @@ export default function SignupPage() {
                         />
                       </span>
                     </div>
+                    {errors.confirmPassword && <p className="text-red-500 text-xs  font-bold">{errors.confirmPassword}</p>}
                   </div>
 
                   {/* Login Button */}
@@ -255,10 +312,8 @@ export default function SignupPage() {
                     </Button>
                   </div>
                 </form>
-              </div>
-
               {/* Signup Link */}
-              <p className="text-center text-gray-600 mx-5">
+              <p className="text-center text-gray-600 mx-5 py-4 text-xs">
                 Already have an account?{" "}
                 <span
                   className="text-orange-500 font-semibold cursor-pointer hover:underline"
@@ -267,6 +322,8 @@ export default function SignupPage() {
                   Login
                 </span>
               </p>
+              </div>
+
             </div>
           </div>
         </div>

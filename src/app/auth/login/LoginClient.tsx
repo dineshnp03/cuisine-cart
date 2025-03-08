@@ -20,6 +20,17 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
 
+    const [errors, setErrors] = useState({
+      email: "",
+      password: "",
+    });
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex =
+    /^[A-Za-z\d@$!%*?&]{8,16}$/;
+
+
+
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -45,9 +56,39 @@ export default function LoginPage() {
     checkSession();
   }, [router]);
 
+  // Validate Form Inputs
+  const validateFormInputs = () => {
+    let isValid: boolean = true;
+
+    const errors = {
+      email: "",
+      password: "",
+    };
+
+    
+    if (!emailRegex.test(form.email)) {
+      errors.email = "Invalid email address.";
+      isValid = false;
+    }
+    if (!passwordRegex.test(form.password)) {
+      errors.password = `Password must be valid format.`;
+      isValid = false;
+    }
+  
+    setErrors(errors);
+    return isValid;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    if (!validateFormInputs()) {
+      setLoading(false);
+      toast.error("Invalid inputs", {
+        description: "Please provide valid details",
+      });
+      return;
+    }
     try {
       const res = await axios.post("/api/auth/login", form);
 
@@ -70,16 +111,12 @@ export default function LoginPage() {
         } else {
           router.push("/");
         }
-      } else {
-        toast.error("Invalid Credentials", {
-          description: "Please check your email and password.",
-        });
-      }
-    } catch (error) {
-      toast.error("Error!", {
-        description: `Something went wrong!, Please try Again ${error}`,
+      } 
+    } catch (error: any) {
+      toast.error(`${error.response.data.error}`, {
+        description: `Please try again with valid credentials`,
       });
-      console.error(error);
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -141,12 +178,16 @@ export default function LoginPage() {
                         placeholder="Enter your email"
                         type="email"
                         value={form.email}
+                        required
                         onChange={(e) =>
                           setForm({ ...form, email: e.target.value })
                         }
                         className="w-full h-12 p-3 pl-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
+                    {errors.email && (
+                      <p className="text-red-500 text-xs  font-bold">{errors.email}</p>
+                    )}
                   </div>
 
                   {/* Password Input */}
@@ -168,6 +209,7 @@ export default function LoginPage() {
                         placeholder="Enter your password"
                         type={showPassword ? "text" : "password"}
                         value={form.password}
+                        required
                         onChange={(e) =>
                           setForm({ ...form, password: e.target.value })
                         }
@@ -190,6 +232,9 @@ export default function LoginPage() {
                         />
                       </span>
                     </div>
+                    {errors.email && (
+                      <p className="text-red-500 text-xs  font-bold">{errors.password}</p>
+                    )}
                   </div>
 
                   {/* Forgot Password Link */}
