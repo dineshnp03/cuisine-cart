@@ -3,9 +3,9 @@
 import { User } from "@/models/User";
 import { signJwtToken } from "@/utils/jwt";
 import { sendResetEmail } from "@/utils/email";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
     const user = await User.findOne({ email });
@@ -19,6 +19,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "Password reset link sent to your email" }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: `Internal Server Error: ${error}` }, { status: 500 });
+    return NextResponse.json({ message: `Internal Server Error: ${error}` }, { status: 500 });
   }
 }
