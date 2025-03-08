@@ -90,7 +90,12 @@ export default function LoginPage() {
       return;
     }
     try {
-      const res = await axios.post("/api/auth/login", form);
+
+      const reqbody = {
+        email: form.email.trim(),
+        password: form.password.trim(),
+      }
+      const res = await axios.post("/api/auth/login", reqbody);
 
       if (res.status === 200) {
         // Store token & role
