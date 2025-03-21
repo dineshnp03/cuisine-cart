@@ -60,8 +60,9 @@ export default function SignupPage() {
         alert("Please fill all the fields");
       }
     } catch (error) {
+      console.log("er-", error.response.data.message);
       toast.error("Signup Failed!", {
-        description: `${error}`,
+        description: `${error.response.data.message}`,
       });
       console.error(error);
     } finally {
@@ -101,15 +102,10 @@ export default function SignupPage() {
 
               <div className="relative w-full flex flex-col items-center  lg:p-10 mt-20 pt-20">
                 {/* Form Section */}
-                <form
-                  onSubmit={handleSubmit}
-                  className="space-y-2 w-[100%] max-w-[400px]"
-                >
+                <form onSubmit={handleSubmit} className="space-y-2 w-[100%] max-w-[400px]">
                   {/* Name Input */}
                   <div className="mb-3">
-                    <Label className="block text-gray-700 font-semibold mb-1">
-                      Name
-                    </Label>
+                    <Label className="block text-gray-700 font-semibold mb-1">Name</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
                         <Image
@@ -124,18 +120,14 @@ export default function SignupPage() {
                         placeholder="Enter your Name"
                         type="text"
                         value={form.name}
-                        onChange={(e) =>
-                          setForm({ ...form, name: e.target.value })
-                        }
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
                         className="w-full h-12 p-3 pl-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
                   </div>
                   {/* Email Input */}
                   <div className="mb-3">
-                    <Label className="block text-gray-700 font-semibold mb-1">
-                      Email
-                    </Label>
+                    <Label className="block text-gray-700 font-semibold mb-1">Email</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
                         <Image
@@ -150,9 +142,7 @@ export default function SignupPage() {
                         placeholder="Enter your email"
                         type="email"
                         value={form.email}
-                        onChange={(e) =>
-                          setForm({ ...form, email: e.target.value })
-                        }
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
                         className="w-full h-12 p-3 pl-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
@@ -160,9 +150,7 @@ export default function SignupPage() {
 
                   {/* Password Input */}
                   <div className="relative mb-3">
-                    <Label className="block text-gray-700 font-semibold mb-1">
-                      Password
-                    </Label>
+                    <Label className="block text-gray-700 font-semibold mb-1">Password</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
                         <Image
@@ -177,20 +165,15 @@ export default function SignupPage() {
                         placeholder="Enter your password"
                         type={showPassword ? "text" : "password"}
                         value={form.password}
-                        onChange={(e) =>
-                          setForm({ ...form, password: e.target.value })
-                        }
+                        onChange={(e) => setForm({ ...form, password: e.target.value })}
                         className="w-full h-12 p-3 pl-12 pr-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                       <span
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
+                        onClick={() => setShowPassword(!showPassword)}>
                         <Image
                           src={
-                            showPassword
-                              ? "/icons/visibility-off.svg"
-                              : "/icons/visibility-on.svg"
+                            showPassword ? "/icons/visibility-off.svg" : "/icons/visibility-on.svg"
                           }
                           alt="Toggle Password"
                           width={22}
@@ -219,17 +202,12 @@ export default function SignupPage() {
                         placeholder="Re-Enter your password"
                         type={showPassword ? "text" : "password"}
                         value={form.confirmPassword}
-                        onChange={(e) =>
-                          setForm({ ...form, confirmPassword: e.target.value })
-                        }
+                        onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                         className="w-full h-12 p-3 pl-12 pr-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                       <span
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                        onClick={() =>
-                          setshowReTypePassword(!showReTypePassword)
-                        }
-                      >
+                        onClick={() => setshowReTypePassword(!showReTypePassword)}>
                         <Image
                           src={
                             showReTypePassword
@@ -249,8 +227,7 @@ export default function SignupPage() {
                   <div className="w-full flex justify-center pt-4">
                     <Button
                       type="submit"
-                      className="w-[80%] bg-orange-500 hover:bg-orange-600 font-semibold py-3 transition duration-200"
-                    >
+                      className="w-[80%] bg-orange-500 hover:bg-orange-600 font-semibold py-3 transition duration-200">
                       {loading ? <Loader /> : "Signup"}
                     </Button>
                   </div>
@@ -262,8 +239,7 @@ export default function SignupPage() {
                 Already have an account?{" "}
                 <span
                   className="text-orange-500 font-semibold cursor-pointer hover:underline"
-                  onClick={() => router.push("/auth/login")}
-                >
+                  onClick={() => router.push("/auth/login")}>
                   Login
                 </span>
               </p>
