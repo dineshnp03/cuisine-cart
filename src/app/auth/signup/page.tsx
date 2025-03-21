@@ -32,8 +32,7 @@ export default function SignupPage() {
 
   const nameRegex = /^(?! )[A-Za-z]+(?: [A-Za-z]+)*$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
 
   useEffect(() => {
     const storedRole = localStorage.getItem("role") || "";
@@ -98,7 +97,7 @@ export default function SignupPage() {
           description: "Your account has been created.",
         });
         router.push("/auth/login");
-      } 
+      }
     } catch (error: any) {
       toast.error(`${error.response.data.error}`, {
         description: `Please try again with valid input details.`,
@@ -141,15 +140,10 @@ export default function SignupPage() {
 
               <div className="relative w-full flex flex-col items-center  lg:p-10 py-8">
                 {/* Form Section */}
-                <form
-                  onSubmit={handleSubmit}
-                  className="space-y-2 w-[100%] max-w-[400px]"
-                >
+                <form onSubmit={handleSubmit} className="space-y-2 w-[100%] max-w-[400px]">
                   {/* Name Input */}
                   <div className="mb-3">
-                    <Label className="block text-gray-700 font-semibold mb-1">
-                      Name
-                    </Label>
+                    <Label className="block text-gray-700 font-semibold mb-1">Name</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
                         <Image
@@ -164,9 +158,7 @@ export default function SignupPage() {
                         placeholder="Enter your Name"
                         type="text"
                         value={form.name}
-                        onChange={(e) =>
-                          setForm({ ...form, name: e.target.value })
-                        }
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
                         className="w-full h-12 p-3 pl-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
@@ -176,9 +168,7 @@ export default function SignupPage() {
                   </div>
                   {/* Email Input */}
                   <div className="mb-3">
-                    <Label className="block text-gray-700 font-semibold mb-1">
-                      Email
-                    </Label>
+                    <Label className="block text-gray-700 font-semibold mb-1">Email</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
                         <Image
@@ -193,9 +183,7 @@ export default function SignupPage() {
                         placeholder="Enter your email"
                         type="email"
                         value={form.email}
-                        onChange={(e) =>
-                          setForm({ ...form, email: e.target.value })
-                        }
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
                         className="w-full h-12 p-3 pl-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                     </div>
@@ -206,9 +194,7 @@ export default function SignupPage() {
 
                   {/* Password Input */}
                   <div className="relative mb-3">
-                    <Label className="block text-gray-700 font-semibold mb-1">
-                      Password
-                    </Label>
+                    <Label className="block text-gray-700 font-semibold mb-1">Password</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
                         <Image
@@ -223,20 +209,15 @@ export default function SignupPage() {
                         placeholder="Enter your password"
                         type={showPassword ? "text" : "password"}
                         value={form.password}
-                        onChange={(e) =>
-                          setForm({ ...form, password: e.target.value })
-                        }
+                        onChange={(e) => setForm({ ...form, password: e.target.value })}
                         className="w-full h-12 p-3 pl-12 pr-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                       <span
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
+                        onClick={() => setShowPassword(!showPassword)}>
                         <Image
                           src={
-                            showPassword
-                              ? "/icons/visibility-off.svg"
-                              : "/icons/visibility-on.svg"
+                            showPassword ? "/icons/visibility-off.svg" : "/icons/visibility-on.svg"
                           }
                           alt="Toggle Password"
                           width={22}
@@ -275,17 +256,12 @@ export default function SignupPage() {
                         placeholder="Re-Enter your password"
                         type={showPassword ? "text" : "password"}
                         value={form.confirmPassword}
-                        onChange={(e) =>
-                          setForm({ ...form, confirmPassword: e.target.value })
-                        }
+                        onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                         className="w-full h-12 p-3 pl-12 pr-12 border border-[#FF9A1F] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                       />
                       <span
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                        onClick={() =>
-                          setshowReTypePassword(!showReTypePassword)
-                        }
-                      >
+                        onClick={() => setshowReTypePassword(!showReTypePassword)}>
                         <Image
                           src={
                             showReTypePassword
@@ -299,31 +275,30 @@ export default function SignupPage() {
                         />
                       </span>
                     </div>
-                    {errors.confirmPassword && <p className="text-red-500 text-xs  font-bold">{errors.confirmPassword}</p>}
+                    {errors.confirmPassword && (
+                      <p className="text-red-500 text-xs  font-bold">{errors.confirmPassword}</p>
+                    )}
                   </div>
 
                   {/* Login Button */}
                   <div className="w-full flex justify-center pt-4">
                     <Button
                       type="submit"
-                      className="w-[80%] bg-orange-500 hover:bg-orange-600 font-semibold py-3 transition duration-200"
-                    >
+                      className="w-[80%] bg-orange-500 hover:bg-orange-600 font-semibold py-3 transition duration-200">
                       {loading ? <Loader /> : "Signup"}
                     </Button>
                   </div>
                 </form>
-              {/* Signup Link */}
-              <p className="text-center text-gray-600 mx-5 py-4 text-xs">
-                Already have an account?{" "}
-                <span
-                  className="text-orange-500 font-semibold cursor-pointer hover:underline"
-                  onClick={() => router.push("/auth/login")}
-                >
-                  Login
-                </span>
-              </p>
+                {/* Signup Link */}
+                <p className="text-center text-gray-600 mx-5 py-4 text-xs">
+                  Already have an account?{" "}
+                  <span
+                    className="text-orange-500 font-semibold cursor-pointer hover:underline"
+                    onClick={() => router.push("/auth/login")}>
+                    Login
+                  </span>
+                </p>
               </div>
-
             </div>
           </div>
         </div>
